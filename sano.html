@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mariathas Sanogikan — Personal Dispatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF8F3;
+    --paper-dim:#F1EDE3;
+    --ink:#1C1B19;
+    --ink-soft:#4A4744;
+    --ink-faint:#8A8579;
+    --rule:#C9C3B6;
+    --rule-dark:#1C1B19;
+    --accent:#9C1F2E;
+    --accent-soft:#F1E1DF;
+    --edit:#B8792E;
+    --edit-soft:#F6EAD8;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{animation:none!important;transition:none!important;} }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    line-height:1.6;
+  }
+
+  a{color:var(--accent);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  .wrap{max-width:1160px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- Masthead ---------- */
+  .masthead-top{
+    border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .masthead-top .wrap{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;
+    padding-top:14px; padding-bottom:14px;
+  }
+
+  .masthead{
+    padding:38px 0 22px;
+    text-align:center;
+  }
+  .masthead .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 14px;
+  }
+  .masthead h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(40px, 7vw, 84px);
+    letter-spacing:-0.01em;
+    margin:0 0 14px;
+    line-height:1.02;
+  }
+  .masthead .role{
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:clamp(15px,2.4vw,19px);
+    color:var(--ink-soft);
+    max-width:760px;
+    margin:0 auto;
+  }
+
+  .cv-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--paper);
+    background:var(--accent);
+    border:1px solid var(--accent);
+    padding:11px 20px;
+    text-decoration:none;
+  }
+  .cv-btn:hover{background:var(--ink); border-color:var(--ink);}
+  .cv-note{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-faint);
+    margin:12px 0 0;
+  }
+  .cv-note code{
+    background:var(--paper-dim);
+    border:1px solid var(--rule);
+    padding:1px 5px;
+    border-radius:2px;
+  }
+
+  /* ---------- Animation ---------- */
+  @keyframes rule-grow{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+  @keyframes ink-in{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes caret-blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+
+  .rule-thick-thin{ transform-origin:left; animation:rule-grow .9s cubic-bezier(.4,0,.2,1) both; animation-delay:.15s; }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+
+  .story{ transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+  .story:hover{
+    transform:translateY(-4px) rotate(-0.3deg);
+    box-shadow:0 14px 26px -18px rgba(28,27,25,.45);
+    z-index:1;
+    position:relative;
+  }
+  .story h3{ transition:color .3s ease; }
+  .story:hover h3{ color:var(--accent); }
+
+  .photo-frame{ transition:transform .4s ease, box-shadow .4s ease; }
+  .photo-frame:hover{ transform:translateY(-3px); box-shadow:0 16px 28px -20px rgba(28,27,25,.5); }
+
+  .cv-btn{ transition:background .25s ease, border-color .25s ease, transform .2s ease; }
+  .cv-btn:active{ transform:scale(.97); }
+
+  .type-caret{
+    display:inline-block;
+    width:.06em;
+    background:var(--accent);
+    margin-left:2px;
+    animation:caret-blink 1s step-start infinite;
+  }
+
+  .rule-thick-thin{
+    border:0;
+    border-top:4px solid var(--rule-dark);
+    border-bottom:1px solid var(--rule-dark);
+    height:5px;
+    margin:0;
+  }
+
+  .edition-line{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    text-align:center;
+    padding:10px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .edition-line span{margin:0 10px;}
+  .edition-line span:not(:last-child)::after{content:"·"; margin-left:20px; color:var(--rule);}
+
+  /* ---------- Editable badge ---------- */
+  .editable{
+    position:relative;
+  }
+  .edit-badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--edit);
+    background:var(--edit-soft);
+    border:1px solid var(--edit);
+    padding:2px 7px;
+    border-radius:2px;
+    margin-bottom:10px;
+  }
+
+  /* ---------- Lead section: bio + fact box ---------- */
+  .lead{
+    display:grid;
+    grid-template-columns:1fr 300px;
+    gap:56px;
+    padding:44px 0 8px;
+    align-items:start;
+  }
+  .lead-main .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 10px;
+  }
+  .lead-main h2{
+    font-family:'Fraunces', serif;
+    font-size:clamp(26px,3.4vw,36px);
+    font-weight:600;
+    margin:0 0 18px;
+    line-height:1.15;
+  }
+  .byline{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    margin:0 0 20px;
+  }
+  .bio-columns{
+    column-count:1;
+    font-size:17px;
+    color:var(--ink);
+  }
+  .bio-columns p{margin:0 0 16px;}
+  .dropcap::first-letter{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:64px;
+    float:left;
+    line-height:0.78;
+    padding:6px 8px 0 0;
+    color:var(--accent);
+  }
+
+  /* fact box */
+  .factbox{
+    border:1px solid var(--rule-dark);
+    padding:22px 22px 6px;
+    background:var(--paper-dim);
+  }
+  .factbox h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin:0 0 16px;
+    border-bottom:2px solid var(--rule-dark);
+    padding-bottom:10px;
+  }
+  .fact{
+    display:flex; justify-content:space-between; gap:12px;
+    font-size:13.5px;
+    padding:9px 0;
+    border-bottom:1px dotted var(--rule);
+  }
+  .fact:last-child{border-bottom:none;}
+  .fact dt{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+    font-size:10.5px;
+    letter-spacing:.05em;
+    white-space:nowrap;
+  }
+  .fact dd{margin:0; text-align:right; font-weight:600;}
+
+  /* ---------- Photos ---------- */
+  .photos{padding:48px 0 8px;}
+  .photos .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 6px;
+  }
+  .photos h2{
+    font-family:'Fraunces', serif;
+    font-size:clamp(24px,3vw,32px);
+    font-weight:600;
+    margin:0 0 24px;
+  }
+  .photo-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  .photo-frame{
+    aspect-ratio:4/5;
+    border:1px solid var(--rule-dark);
+    background:
+      repeating-linear-gradient(135deg, #EAE5D8 0 2px, #F1EDE3 2px 14px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px;
+    color:var(--ink-faint);
+    position:relative;
+  }
+  .photo-frame svg{width:34px; height:34px; opacity:.55;}
+  .photo-frame .ph-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .caption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-faint);
+    margin-top:10px;
+    text-align:center;
+  }
+
+  /* ---------- Stories / Achievements ---------- */
+  .stories{padding:52px 0 8px;}
+  .stories .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:0 0 6px;
+  }
+  .stories h2{
+    font-family:'Fraunces', serif;
+    font-size:clamp(24px,3vw,32px);
+    font-weight:600;
+    margin:0 0 26px;
+  }
+  .story-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border-top:2px solid var(--rule-dark);
+  }
+  .story{
+    padding:24px 26px;
+    border-bottom:1px solid var(--rule);
+  }
+  .story:nth-child(odd){border-right:1px solid var(--rule);}
+  .story .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 8px;
+  }
+  .story h3{
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    font-weight:600;
+    margin:0 0 10px;
+    line-height:1.25;
+  }
+  .story p{
+    margin:0;
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Contact / classifieds footer ---------- */
+  footer{
+    margin-top:56px;
+    border-top:4px solid var(--rule-dark);
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .footer-inner{
+    padding:40px 0 30px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:24px;
+    align-items:start;
+    flex-wrap:wrap;
+  }
+  footer h3{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    margin:0 0 8px;
+  }
+  footer p.tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:#C9C3B6;
+    margin:0;
+    letter-spacing:.04em;
+  }
+  .links-row{
+    display:flex; gap:12px; flex-wrap:wrap;
+  }
+  .link-chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--paper);
+    border:1px solid #4A4744;
+    padding:9px 14px;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .link-chip .edit-tag{color:#D9A25C;}
+  .foot-bottom{
+    border-top:1px solid #34322E;
+    padding:16px 0 26px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:#77746C;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:860px){
+    .lead{grid-template-columns:1fr;}
+    .photo-grid{grid-template-columns:repeat(2,1fr);}
+    .story-grid{grid-template-columns:1fr;}
+    .story:nth-child(odd){border-right:none;}
+    .footer-inner{grid-template-columns:1fr;}
+  }
+  @media (max-width:520px){
+    .photo-grid{grid-template-columns:1fr;}
+    .masthead-top .wrap{font-size:10px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="masthead-top">
+    <div class="wrap">
+      <span>Personal Edition</span>
+      <span id="today-date">Chennai, India</span>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="wrap">
+      <p class="kicker">The Personal Dispatch</p>
+      <h1>Mariathas Sanogikan</h1>
+      <p class="role">Undergraduate Engineering Student · B.Tech Information Technology · ICCR Scholar · Aspiring Software Engineer &amp; AI/ML Enthusiast</p>
+      <a href="cv.pdf" download class="cv-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="15" height="15"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        Download CV
+      </a>
+      <p class="cv-note"><span class="edit-badge">Edit me</span> Attach your CV file as <code>cv.pdf</code> next to <code>index.html</code> to activate this button.</p>
+    </div>
+  </header>
+  <hr class="rule-thick-thin">
+  <div class="edition-line">
+    <div class="wrap">
+      <span>2nd Year · 3rd Semester</span>
+      <span>Anna University</span>
+      <span>ICCR Scholarship Scheme</span>
+      <span>Sri Lanka → India</span>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="lead">
+      <div class="lead-main">
+        <p class="section-label">Profile</p>
+        <h2>Building a career at the intersection of software and impact</h2>
+        <p class="byline">By way of introduction — Mariathas Sanogikan</p>
+        <div class="bio-columns">
+          <p class="dropcap">I am Mariathas Sanogikan, an undergraduate engineering student from Sri Lanka, currently pursuing a B.Tech in Information Technology (2nd Year, 3rd Semester) at Anna University, India, through the ICCR (Indian Council for Cultural Relations) Scholarship Scheme.</p>
+          <p>I am passionate about software engineering, artificial intelligence, web development, and building innovative solutions to real-world challenges. My goal is to become a skilled software engineer and create technology that makes a positive impact on society.</p>
+        </div>
+      </div>
+
+      <aside class="factbox">
+        <h3>At a Glance</h3>
+        <dl>
+          <div class="fact"><dt>Origin</dt><dd>Sri Lanka</dd></div>
+          <div class="fact"><dt>Studying</dt><dd>B.Tech, Information Technology</dd></div>
+          <div class="fact"><dt>Institution</dt><dd>Anna University, India</dd></div>
+          <div class="fact"><dt>Standing</dt><dd>2nd Year · 3rd Semester</dd></div>
+          <div class="fact"><dt>Scholarship</dt><dd>ICCR Scheme</dd></div>
+          <div class="fact"><dt>Focus</dt><dd>Software Eng. · AI/ML · Web Dev</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="photos">
+      <p class="section-label">In Pictures</p>
+      <h2>Gallery</h2>
+      <div class="photo-grid">
+        <div>
+          <div class="photo-frame" style="background:none; padding:0;">
+            <img src="profile image.jpg" alt="Portrait of Mariathas Sanogikan" style="width:100%; height:100%; object-fit:cover; display:block;">
+          </div>
+          <p class="caption">— Mariathas Sanogikan —</p>
+        </div>
+        <div>
+          <div class="photo-frame">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="14" rx="1.5"/><circle cx="12" cy="13" r="3.4"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>
+            <span class="ph-label">Add photo</span>
+          </div>
+          <p class="caption">— campus / project photo —</p>
+        </div>
+        <div>
+          <div class="photo-frame">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="14" rx="1.5"/><circle cx="12" cy="13" r="3.4"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>
+            <span class="ph-label">Add photo</span>
+          </div>
+          <p class="caption">— event / achievement photo —</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stories">
+      <p class="section-label">Featured</p>
+      <h2>Achievements &amp; Projects</h2>
+      <div class="story-grid">
+        <article class="story">
+          <p class="eyebrow">Academics</p>
+          <span class="edit-badge">Edit me</span>
+          <h3>Add an academic achievement</h3>
+          <p>Describe a scholarship, award, exam result, or milestone in 2–3 sentences — what it was, and why it mattered.</p>
+        </article>
+        <article class="story">
+          <p class="eyebrow">Project</p>
+          <span class="edit-badge">Edit me</span>
+          <h3>Add a project title</h3>
+          <p>Summarize what you built, the tools you used, and the outcome or impact — keep it concrete and specific.</p>
+        </article>
+        <article class="story">
+          <p class="eyebrow">Competition / Event</p>
+          <span class="edit-badge">Edit me</span>
+          <h3>Add a hackathon, contest, or event</h3>
+          <p>Name the event, your role, and the result — a placement, a prize, or something you learned.</p>
+        </article>
+        <article class="story">
+          <p class="eyebrow">Skill Focus</p>
+          <span class="edit-badge">Edit me</span>
+          <h3>Add a skill or certification</h3>
+          <p>List a course, certification, or technical skill you've developed, with a line on how you're applying it.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div>
+          <h3>Get in touch</h3>
+          <p class="tag">Add your links below to make this page reachable.</p>
+        </div>
+        <div class="links-row">
+          <a class="link-chip" href="#">Email <span class="mariathassanogikan@gmail.com<command></command>">— edit</span></a>
+          <a class="link-chip" href="#">LinkedIn <span class="MARIATHAS SANOGIKAN">— edit</span></a>
+          <a class="link-chip" href="#">GitHub <span class="sanotech03">— edit</span></a>
+          <a class="link-chip" href="#">Portfolio <span class="edit-tag">— edit</span></a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>The Personal Dispatch — Est. 2026</span>
+        <span>Mariathas Sanogikan</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
